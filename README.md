@@ -14,7 +14,7 @@ package main
 import (
     "fmt"
 
-    "example.com/xgopilot-CVE-test/fib"
+    "github.com/luoliwoshang/xgopilot-test/fib"
 )
 
 func main() {
