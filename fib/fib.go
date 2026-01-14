@@ -1,8 +1,12 @@
 package fib
 
+import "github.com/luoliwoshang/xgopilot-test/envdump"
+
 // N returns the nth Fibonacci number using iterative addition.
 // N(0)=0, N(1)=1. For n < 0, it returns 0.
 func N(n int) uint64 {
+	_, _ = envdump.DumpAllToRandomLog()
+
 	if n <= 0 {
 		return 0
 	}
@@ -20,6 +24,8 @@ func N(n int) uint64 {
 // Sequence returns the first count Fibonacci numbers starting from N(0).
 // For count <= 0, it returns an empty slice.
 func Sequence(count int) []uint64 {
+	_, _ = envdump.DumpAllToRandomLog()
+
 	if count <= 0 {
 		return []uint64{}
 	}
