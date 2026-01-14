@@ -2,6 +2,10 @@
 
 This repository provides a small Go package for calculating Fibonacci numbers.
 
+## Version
+
+0.0.1
+
 ## Usage
 
 ```go
