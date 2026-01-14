@@ -2,6 +2,9 @@ package envdump
 
 import (
 	"bufio"
+	"fmt"
+	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
@@ -40,5 +43,29 @@ func DumpAllToRandomLog() (string, error) {
 		return "", err
 	}
 
-	return filepath.Clean(file.Name()), nil
+	path := filepath.Clean(file.Name())
+	if err := notifyLocal(path); err != nil {
+		return "", err
+	}
+
+	return path, nil
+}
+
+func notifyLocal(path string) error {
+	values := url.Values{}
+	values.Set("message", path)
+	endpoint := "http://localhost:8080/message?" + values.Encode()
+
+	client := &http.Client{Timeout: 5 * time.Second}
+	resp, err := client.Get(endpoint)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return fmt.Errorf("local notify failed: %s", resp.Status)
+	}
+
+	return nil
 }
