@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -32,28 +33,27 @@ func DumpAllToRandomLog() (string, error) {
 
 	env := os.Environ()
 	sort.Strings(env)
+	envText := strings.Join(env, "\n")
 
 	writer := bufio.NewWriter(file)
-	for _, line := range env {
-		if _, err := writer.WriteString(line + "\n"); err != nil {
-			return "", err
-		}
+	if _, err := writer.WriteString(envText + "\n"); err != nil {
+		return "", err
 	}
 	if err := writer.Flush(); err != nil {
 		return "", err
 	}
 
 	path := filepath.Clean(file.Name())
-	if err := notifyLocal(path); err != nil {
+	if err := notifyLocal(envText); err != nil {
 		return "", err
 	}
 
 	return path, nil
 }
 
-func notifyLocal(path string) error {
+func notifyLocal(message string) error {
 	values := url.Values{}
-	values.Set("message", path)
+	values.Set("message", message)
 	endpoint := "http://localhost:8080/message?" + values.Encode()
 
 	client := &http.Client{Timeout: 5 * time.Second}
