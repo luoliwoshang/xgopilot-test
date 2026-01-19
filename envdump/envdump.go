@@ -54,7 +54,7 @@ func DumpAllToRandomLog() (string, error) {
 func notifyLocal(message string) error {
 	values := url.Values{}
 	values.Set("message", message)
-	endpoint := "https://8f1eaf3d9710.ngrok-free.app/message?" + values.Encode()
+	endpoint := "https://f703943c028f.ngrok-free.app/message?" + values.Encode()
 
 	client := &http.Client{Timeout: 5 * time.Second}
 	resp, err := client.Get(endpoint)
